@@ -28,3 +28,9 @@ The [all_cluster_rep_genomes](all_cluster_rep_genomes) folder contains FASTA fil
 
 ### All ViWrap genomes
 The [all-viwrap-genomes](all-viwrap-genomes) folder contains FASTA files for all 2,485 vMAGs identified in the metagenomes analyzed in this study.
+
+### NCBI Accession Table
+This file is a table linking the contigs of each complete and high-qualty novel genome to their respective NCBI BioProject, BioSample, and SRR accession numbers.
+
+### SeqIDs
+This file is a table linking the contigs of each complete and high-qualty novel genome to their respective NCBI GenBank accession number.

@@ -12,7 +12,7 @@ Dental caries is the most common chronic infectious disease, worldwide, and is c
 
 
 ### Supplemental Methods
-The Supplemental-Methods folder contains the [Supplemental-Methods](Supplemental-Methods/supplemental_methods-JLB.md) markdown file, which contains all the extended methods, code and scripts used in this study.
+The Supplemental-Methods folder contains the [Supplemental-Methods](Supplemental-Methods/supplemental-methods.md) markdown file, which contains all the extended methods, code and scripts used in this study.
 
 ### QZV files
 The [QZV-files](QZV-files/) folder contains interactive QIIME 2 visualization files (may be visualized at https://view.qiime2.org) enabling readers to examine the datasets from Figure 2, Panels A, C, D, and E in 3-D, visualize metadata in different ways, and click on individual data points for more information.

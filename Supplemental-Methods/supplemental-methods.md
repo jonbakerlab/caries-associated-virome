@@ -199,6 +199,7 @@ conda run -p "/miniforge3/envs/anvio-dev" anvi-dereplicate-genomes \
     -o "/derep/derep_output_fastani/anvio_genome_similarity" \
     --program fastANI \
     --similarity-threshold 0.95 \
+    --min-fraction 0.85 \
     --log-file "/derep/derep_output_fastani/anvio_derep_log.txt" \
     --num-threads 24 \
     --force-overwrite
@@ -453,7 +454,7 @@ echo "All genomes split"
 
 The human virus genomes were then dereplicated with `anvi-dereplicate-genomes` using fastANI and a 0.95 similarity threshold, as previously shown in the ViWrap-binned genomes' [dereplication step](#dereplication). Unlike the ViWrap-binned genome clusters, the dereplicated human virus genome clusters were not reassessed for new cluster-representative genomes.
 
-### Intial mapping using BWA-MEM
+### Initial mapping using BWA-MEM
 
 BWA-MEM was then used through the `anvio-dev` conda environment to map the original metagenomic assemblies to the cluster-representative genomes. The database FASTA file used as input must first be indexed by BWA-MEM:
 

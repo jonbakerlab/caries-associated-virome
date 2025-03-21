@@ -2,16 +2,14 @@
 
 **Authors: Jonah Tang and Jonathon L. Baker**
 
-This document catalogues the scripts and computational methods used in "The salivary virome during childhood dental caries". Saliva samples were collected from individuals as detailed in a previous study by our group, Baker et al. 2021 (PMID: 33239396). While the previous study examined metagenomics of these samples with a primarily bacterial focus, this study examined the oral virome and its relationship to caries, the bacteriome, and host immunological markers. This study also identified novel viral taxa. The raw sequencing reads of the oral metagenomes and are available on NCBI with accession numbers PRJNA478018 and SRP151559. The bacterial genomes assembled from those reads  are available on NCBI under the accession number PRJNA624185.  The 53 vMAGs representing novel vOTUs rated as either ‘complete’ or ‘high-quality’ by CheckV are available on NCBI with the accession number XXX.
+This document catalogues the scripts and computational methods used in "The salivary virome during childhood dental caries". Saliva samples were collected from individuals as detailed in a previous study by our group, Baker et al. 2021 (PMID: 33239396). While the previous study examined metagenomics of these samples with a primarily bacterial focus, this study examined the oral virome and its relationship to caries, the bacteriome, and host immunological markers. This study also identified novel viral taxa. The raw sequencing reads of the oral metagenomes and are available on NCBI with accession numbers PRJNA478018 and SRP151559. The bacterial genomes assembled from those reads  are available on NCBI under the accession number PRJNA624185.  The 35 vMAGs representing novel vOTUs rated as either ‘complete’ or ‘high-quality’ by CheckV are available on NCBI with the accession number *XXX*.
 
 ## Abstract
-While many studies have examined the bacterial taxa associated with dental caries, the most common chronic infectious disease globally, little is known about the caries-associated virome.  In this study, the salivary viromes of 21 children with severe caries (>2 dentin lesions) and 23 children with healthy dentition were examined.  2,485 viral metagenome-assembled genomes (vMAGs) were identified, binned, and quantified from the metagenomic assemblies.  These vMAGs were mostly phage, and represented 1,547 unique species-level vOTUs, 247 of which appear to be novel.  The metagenomes were also queried for all 3,835 unique species-level vOTUs of DNA viruses with a human host on NCBI Virus, however all but Human betaherpesvirus 7 were at very low abundance in the saliva.  The oral viromes of the children with caries exhibited significantly different beta diversity compared to the oral virome of the children with healthy dentition; several vOTUs predicted to infect Pauljensenia and Neisseria were strongly correlated with health, and two vOTUs predicted to infect Saccharibacteria and Prevotella histicola, respectively, were correlated with caries.  Co-occurrence analysis indicated that phage typically co-occurred with both their predicted hosts and with bacteria that were themselves associated with the same disease status.  Overall, this study provided the sequences of 53 complete or nearly complete novel oral phages and illustrated the significance of the oral virome in the context of dental caries, which has been largely overlooked.  This work represents an important step towards the identification and study of phage therapy candidates which treat or prevent caries pathogenesis.
-
-
+While many studies have examined the bacterial taxa associated with dental caries, the most common chronic infectious disease globally, little is known about the caries-associated virome.  In this study, the salivary viromes of 21 children with severe caries (>2 dentin lesions) and 23 children with healthy dentition were examined.  2,485 viral metagenome-assembled genomes (vMAGs) were identified, binned, and quantified from the metagenomic assemblies.  These vMAGs were mostly phage, and represented 1,865 unique species-level viral operational taxonomic units (vOTUs), 478 of which appear to be novel.  The metagenomes were also queried for all 3,858 unique species-level vOTUs of DNA viruses with a human host on NCBI Virus, however all but *Human betaherpesvirus 7* were at very low abundance in the saliva.  The oral viromes of the children with caries exhibited significantly different beta diversity compared to the oral virome of the children with healthy dentition; several vOTUs predicted to infect *Haemophilus* and *Neisseria* were strongly correlated with health, and a few vOTUs predicted to infect Saccharibacteria and *Veillonella* were correlated with caries.  Co-occurrence analysis indicated that phage typically co-occurred with both their predicted hosts and with bacteria that were themselves associated with the same disease status.  Overall, this study provided the sequences of 35 complete or nearly complete novel oral phages and illustrated the potential significance of the oral virome in the context of dental caries, which has been largely overlooked.  This work represents an important step towards the identification and study of phage therapy candidates which treat or prevent caries pathogenesis.
 
 ## ViWrap
 
-Metagenomic assemblies were first processed with [ViWrap](https://github.com/AnantharamanLab/ViWrap) v1.3.0, a comprehensive tool for identification, binning, quality analysis, taxonomic precdiction, and host prediction of vMAGs. Each sample was processed with the following arguments:
+Metagenomic assemblies were first processed with [ViWrap](https://github.com/AnantharamanLab/ViWrap) v1.3.0, a comprehensive tool for identification, binning, quality analysis, taxonomic prediction, and host prediction of vMAGs. Each sample was processed with the following arguments:
 
 ```sh
 conda run -p ViWrap_conda_environments/ViWrap ViWrap/ViWrap run \
@@ -25,7 +23,7 @@ conda run -p ViWrap_conda_environments/ViWrap ViWrap/ViWrap run \
             --input_length_limit 5000
 ```
 
-The output provided binning data from the vRhyme component of the ViWrap pipeline. However, this tool did not yield output for sample 23, resulting in its absence from  certain downstream analyses.
+The output provided binning data from the vRhyme component of the ViWrap pipeline. However, this tool did not yield output for sample 23, resulting in its absence from certain downstream analyses. While it did not yield any binned vMAGs, sample 23 was still used for the read mapping steps using BWA-MEM and CoverM described later in this article.
 
 ### Compilation of ViWrap Output
 
@@ -141,7 +139,6 @@ do
         bash "viwrap_compile_tables.sh" "$i"
     fi
 done
-
 ```
 
 Finally, each `<sample-id>_Compiled_Output.txt` was compiled into a singular file `All_Compiled_Output.txt` with the following script; importantly, this script prepends the sample identifier to the names of the bins, providing an intermediate name for the genome (e.g. sample 1's `vRhyme_bin_1` becomes `1_vRhyme_bin_1`):
@@ -187,7 +184,7 @@ rm $tmp_all_output
 
 ## Dereplication & Clustering
 
-The assembled genomes were then dereplicated and organized into clusters by ANI similarity using a 95% cutoff, generally utilized to estimate the species taxonomic level (Jain et al. 2019; PMID:30504855). We opted to then select cluster representative genomes for downstream analyses based on genome completeness as predicted by ViWrap.
+The assembled genomes were then dereplicated and organized into clusters using a 95% cutoff for average nucleotide identity (ANI) and 85% alignment fraction (AF), as specified by the MIUViG standards (Roux et al. 2019; PMID:30556814). We then selected a genome from each cluster to represent the species as a viral operational taxonomic unit (vOTU) for downstream analyses; selection was based on genome completeness as predicted by CheckV.
 
 ### Dereplication
 
@@ -199,7 +196,7 @@ conda run -p "/miniforge3/envs/anvio-dev" anvi-dereplicate-genomes \
     -o "/derep/derep_output_fastani/anvio_genome_similarity" \
     --program fastANI \
     --similarity-threshold 0.95 \
-    --min-fraction 0.85 \
+    --min-alignment-fraction 0.85 \
     --log-file "/derep/derep_output_fastani/anvio_derep_log.txt" \
     --num-threads 24 \
     --force-overwrite
@@ -402,7 +399,7 @@ cp $tmp_output $3
 ```
 
 ### Determine novelty of vOTUs
-To determine whether any of the 1,547 unique vOTUs obtained from ViWrap were novel (i.e., not previously reported), we compared them, using a threshold of 95% ANI, to all 42,811 "Bacteriophage" genomes on NCBI Virus (as of April 2024) and all 48,425 genomes in the Oral Virome Database (OVD; PMID:35663034) using `skani`:
+To determine whether any of the 1,865 unique vOTUs obtained from ViWrap were novel (i.e., not previously reported), we compared them using `skani` to all 42,811 "Bacteriophage" genomes on NCBI Virus (as of April 2024) and five different viral databases: Oral Virome Database (OVD, 48,425 genomes; PMID:35663034), Gut Virome Database (GVD, 33,242 genomes; PMID: 32841606), Gut Phage Database (GPD, 142,809 genomes; PMID: 33606979), Metagenomic Gut Virus catalogue (189,680 genomes, PMID: 34168315), and IMG/VR4 (15,722,824 genomes, PMID: 36399502).
 
 ```sh
 # Sketched both databases and our vOTUs
@@ -411,16 +408,12 @@ skani sketch -l querylist.txt -t 8 -o query-sketch
 # Compare .sketch files
 skani dist -t 8 --ql samples.txt --rl refs.txt -o output
 ```
-This indicated that 247 of the vOTUs from this study did not have a match in NCBI or OVD ≥95% ANI, indicating that these oral vOTUs have likely not been previously described.
+478 of the vOTUs from this study did not have a match at 95% ANI and 85% AF in these databases, indicating that these vOTUs have likely not been previously described.
 
 
-## OTU Table Construction
+## Human DNA Virus Identification
 
-With the new cluster-representative genomes, we mapped our original metagenomic assembly reads to the cluster-representative genomes to determine read counts for diversity analysis.
-
-### NCBI Human DNA Virus Inclusion
-
-At this step, in addition to using our cluster-representative genomes from the binned ViWrap output for mapping, we also included cluster-representative genomes from human DNA virus genomes from the [NCBI Virus portal](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/). The NCBI viral genomes FASTA file (downloaded on March 20th, 2024) had to be split into separate files in order for the genomes to be dereplicated via `anvi-dereplicate-genomes`, which was done with the following script:
+We also examined the metagenomic assemblies for human DNA virus genomes from the [NCBI Virus portal](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/). The NCBI viral genomes FASTA file (downloaded on March 20th, 2024) had to be split into separate files in order for the genomes to be dereplicated via `anvi-dereplicate-genomes`, which was done with the following script:
 
 #### split_fasta_file.sh
 
@@ -452,11 +445,11 @@ done < $1
 echo "All genomes split"
 ```
 
-The human virus genomes were then dereplicated with `anvi-dereplicate-genomes` using fastANI and a 0.95 similarity threshold, as previously shown in the ViWrap-binned genomes' [dereplication step](#dereplication). Unlike the ViWrap-binned genome clusters, the dereplicated human virus genome clusters were not reassessed for new cluster-representative genomes.
+The human virus genomes were then dereplicated with `anvi-dereplicate-genomes` at 95% ANI and 85% AF, as previously shown in the [vMAG dereplication step](#dereplication). Unlike the vMAG genome clusters, the dereplicated human virus genome clusters were not reassessed for new cluster-representative genomes, and the Anvi'o default of "centrality" was used select to the vOTUs.
 
-### Initial mapping using BWA-MEM
+### Mapping using BWA-MEM
 
-BWA-MEM was then used through the `anvio-dev` conda environment to map the original metagenomic assemblies to the cluster-representative genomes. The database FASTA file used as input must first be indexed by BWA-MEM:
+BWA-MEM was then used through the `anvio-dev` conda environment to map the original metagenomic reads to the human DNA virus vOTUs. The database FASTA file used as input must first be indexed by BWA-MEM:
 
 ```sh
 bwa index cluster_rep_human_database_fixed.fasta
@@ -639,7 +632,7 @@ for datafile in *.fixed; do
 done
 ```
 
-The files containing the counts were then merged together to create the OTU table:
+The files containing the counts were then merged together to create the human DNA virus OTU table:
 
 ```sh
 # Make OTU table
@@ -654,7 +647,11 @@ paste 1st.txt *.column > otu_table.txt
 
 Human DNA virus features with a sum of less than 10,000 reads were filtered out of the table.
 
-### CoverM
+## Final OTU Table Construction
+
+We mapped our original metagenomic reads to both the phage and human DNA virus vOTUs to produce an OTU table for diversity analysis.
+
+### Mapping with CoverM
 
 [CoverM](https://github.com/wwood/CoverM) v0.6.1, implementing minimap2, was used to contruct an OTU table with relative abundances normalized for genome length:
 
@@ -668,17 +665,17 @@ conda run -p "ViWrap_conda_environments/ViWrap-Mapping" coverm genome \
         -2 "$(find virome/${sample_id}_S*_R1_001_kneaddata_paired_2.fastq)"
 ```
 
-CoverM created a relative abundance table for each sample. Using `paste` to join all of the files together, an OTU table with  relative abundances was obtained. The values in the table were multiplied by a factor of 1,000,000 and rounded to the nearest integer using Excel in order to process the OTU table as a frequency table for downstream analyses.
+CoverM created a relative abundance table for each sample. Using `paste` to join all of the files together, an OTU table with  relative abundances was obtained. The values in the table were multiplied by a factor of 1,000,000 and rounded to the nearest integer using Microsoft Excel in order to process the OTU table as a frequency table for downstream analyses.
 
 ### Filtering
 
-The final OTU table was filtered using `qiime feature-table filter-features`, to remove features with less than 100,000 total read counts across all  (i.e., 0.1% total relative abundance) or that were present in less than 10 samples:
+The final OTU table was filtered using `qiime feature-table filter-features`, to remove features with less than 100,000 total read counts across all samples (i.e., 0.1% total relative abundance) or that were present in less than 10 samples:
 
 ```sh
 qiime feature-table filter-features --i-table otu_table.qza --p-min-frequency 100000 --p-min-samples 10 --o-filtered-table qiime_filtered_otu_table_1.qza
 ```
 
-These filtering thresholds left us with 404 total features.
+These filtering thresholds left us with 476 total features, comprising 475 phage vOTUs and 1 human DNA virus vOTU, *Human betaherpesvirus 7*.
 
 ### Looking for *Human betaherpesvirus 7* and *Human gammaherpesvirus 4* features
 The MetaPhlAn2 analysis in the previous study (PMID:33239396) had identified the presence of *Human betaherpesvirus 7* (HHV7) and *Human gammaherpesvirus 4* (HHV4), and had suggested that both taxa were associated with caries, based on Songbird, with HHV4 being the taxa most associated with caries.  In contrast, HHV4 was not detected at significant abundances in the analysis performed in this study. Meanwhile, HHV7 was the only human DNA virus with a high enough relative abundance to make it into the final OTU table.  5_vRhyme_unbinned_20, obtained from ViWrap, was closely related to HHV7, but was a small ~5000bp fragment only. To more closely examine any HHV sequences in our dataset, the reads in Sample 5 (the sample with the highest abundance of both HHV7 and HHV4 in the previous study) were mapped to the annotated HHV7 and HHV4 genomes:
@@ -711,22 +708,114 @@ With the final OTU table constructed and filtered, downstream analyses of the ca
 
 We utilized QIIME 2's inbuilt diversity analysis tool, `qiime diversity`, to test different diversity metrics, and any significant association with sample metadata.
 
-### DEICODE
-
-We used the QIIME 2 plugin [DEICODE](https://library.qiime2.org/plugins/deicode/19/) to create a robust Aitchison PCA distance matrix to visualize as a biplot. The visualization was performed using the QIIME 2 [Emperor](https://biocore.github.io/emperor/) plugin:
+#### Relative Frequency Table
 
 ```sh
-# DEICODE rpca to create distance matrix
-qiime deicode rpca --i-table qiime_filtered_otu_table_1.qza --p-min-feature-count 10 --p-min-sample-count 500 --o-biplot rpca2.qza --o-distance-matrix distance_matrix2.qza
-
-# Create QIIME 2 visualization file with Emperor
-qiime emperor biplot --i-biplot rpca2.qza --m-sample-metadata-file metadata.txt --o-visualization biplot20-2.qzv --p-number-of-features 20
+# Relative abundance table for qiime pcoa-biplot
+conda run -p $2 qiime feature-table relative-frequency \
+    --i-table $1 \
+    --o-relative-frequency-table $file_otu_relative_frequency
 ```
 
-This biplot is featured as figure (TODO).
+#### Alpha Diversity
+
+```sh
+# Alpha diversity
+conda run -p $2 qiime diversity alpha \
+    --i-table $1 \
+    --p-metric shannon \
+    --o-alpha-diversity $file_alpha_diversity
+
+# Alpha correlation spearman
+conda run -p $2 qiime diversity alpha-correlation \
+    --i-alpha-diversity $file_alpha_diversity \
+    --m-metadata-file $file_sample_metadata \
+    --p-method spearman \
+    --o-visualization $file_alpha_correlation_spearman
+```
+
+#### Beta Diversity
+
+```sh
+# Beta diversity braycurtis distance matrix
+conda run -p $2 qiime diversity beta \
+    --i-table $1 \
+    --p-metric braycurtis \
+    --o-distance-matrix $file_beta_diversity_braycurtis_distance_matrix
+
+# Beta diversity braycurits pcoa
+conda run -p $2 qiime diversity pcoa \
+    --i-distance-matrix $file_beta_diversity_braycurtis_distance_matrix \
+    --o-pcoa $file_beta_diversity_braycurtis_pcoa
+
+# Beta diversity braycurtis biplot
+conda run -p $2 qiime diversity pcoa-biplot \
+    --i-pcoa $file_beta_diversity_braycurtis_pcoa \
+    --i-features $file_otu_relative_frequency \
+    --o-biplot $file_beta_diversity_braycurtis_biplot
+
+# Beta diversity braycurtis permanova
+conda run -p $2 qiime diversity beta-group-significance \
+    --i-distance-matrix $file_beta_diversity_braycurtis_distance_matrix \
+    --m-metadata-file $file_sample_metadata \
+    --m-metadata-column Status \
+    --p-method permanova \
+    --o-visualization $file_beta_diversity_braycurtis_permanova
+```
+*The above steps were also performed using the Jaccard metric for beta diversity.*
+
+We used the QIIME 2 plugin [DEICODE](https://library.qiime2.org/plugins/deicode/19/) to create a robust Aitchison PCA (RPCA) distance matrix:
+
+```sh
+# Beta diversity rpca
+conda run -p $2 qiime deicode rpca \
+    --i-table $1 \
+    --p-min-feature-count 10 \
+    --p-min-sample-count 500 \
+    --o-biplot $file_beta_diversity_rpca_biplot \
+    --o-distance-matrix $file_beta_diversity_rpca_distance_matrix
+
+# Beta diversity rpca permanova
+conda run -p $2 qiime diversity beta-group-significance \
+    --i-distance-matrix $file_beta_diversity_rpca_distance_matrix \
+    --m-metadata-file $file_sample_metadata \
+    --m-metadata-column Status \
+    --p-method permanova \
+    --o-visualization $file_beta_diversity_rpca_permanova
+```
+
+The visualization of these biplots was done using the QIIME 2 [Emperor](https://biocore.github.io/emperor/) plugin:
+
+```sh
+# braycurtis
+conda run -p $2 qiime emperor biplot \
+    --i-biplot $file_beta_diversity_braycurtis_biplot \
+    --m-sample-metadata-file $file_sample_metadata \
+    --m-feature-metadata-file $file_feature_metadata \
+    --o-visualization $file_beta_diversity_braycurtis_biplot_visualization \
+    --p-number-of-features 15
+
+# jaccard
+conda run -p $2 qiime emperor biplot \
+    --i-biplot $file_beta_diversity_jaccard_biplot \
+    --m-sample-metadata-file $file_sample_metadata \
+    --m-feature-metadata-file $file_feature_metadata \
+    --o-visualization $file_beta_diversity_jaccard_biplot_visualization \
+    --p-number-of-features 15
+
+# rpca
+conda run -p $2 qiime emperor biplot \
+    --i-biplot $file_beta_diversity_rpca_biplot \
+    --m-sample-metadata-file $file_sample_metadata \
+    --m-feature-metadata-file $file_feature_metadata \
+    --o-visualization $file_beta_diversity_rpca_biplot_visualization \
+    --p-number-of-features 15
+```
+
+An annotated version of the RPCA biplot is featured as Figure 2A.
 
 ### Differential Abundance
-Due to the issues inherent with performing differential abundance analysis on compositional data (Gloor et al., 2017, PMID:29187837; Morton et al., 2019, PMID:31222023), we used two different methods to examine differential abundance:
+Due to the issues inherent with performing differential abundance analysis on compositional data (Gloor et al., 2017, PMID:29187837; Morton et al., 2019, PMID:31222023), we used three different methods to examine differential abundance: Songbird, DESeq2, and ANCOM-BC.
 
 #### 1. Songbird
 
@@ -746,7 +835,7 @@ qiime songbird multinomial \
     --o-regression-biplot regression_biplot.qza
 ```
 
-Using Songbird for a dataset also necessitates the generation of a [null model](https://github.com/biocore/songbird?tab=readme-ov-file#612-null-models-and-qiime-2--songbird) to calculate the Q<sup>2</sup> score.
+Using Songbird for a dataset also necessitates the generation of a [null model](https://github.com/biocore/songbird?tab=readme-ov-file#612-null-models-and-qiime-2--songbird).
 
 ```sh
 # Null model (identical input except for formula and output files)
@@ -762,16 +851,12 @@ qiime songbird multinomial \
     --o-regression-stats null_stats.qza \
     --o-regression-biplot null_biplot.qza
 
-# Visualize the original and null models together with the Q^2 score
+# Visualize the original and null models together
 qiime songbird summarize-paired \
     --i-regression-stats regression_stats.qza \
     --i-baseline-stats null_stats.qza \
     --o-visualization paired_summary.qzv
 ```
-
-The regression stats of the output, together with those of the null model, yielded a Q<sup>2</sup> score of 0.009674.
-
-![Songbird cross validation image](./markdown-images/songbird-cross-validation-score.png "Songbird cross validation with QIIME 2 View")
 
 The Songbird output file `differentials.qza` was converted into the metadata file `virus_genome_metadata.txt` for our viral genomes:
 
@@ -955,9 +1040,18 @@ nt <- normTransform(dds) # defaults to log2(x+1)
 log2.norm.counts <- assay(nt)[select,]
 df <- as.data.frame(colData(dds)[,c("condition")]) 
 pheatmap(log2.norm.counts, cluster_rows=FALSE, show_rownames=TRUE, cluster_cols=FALSE)
-
 ```
+#### 3. ANCOM-BC
 
+ANCOM-BC was used through QIIME 2, and the resulting differentials were exported and visualized.
+
+```sh
+qiime composition ancombc \
+    --i-table qiime_filtered_otu_table_1.qza \
+    --m-metadata-file metadata.tsv \
+    --p-formula Status \
+    --o-differentials ancombc_differentials.qza
+```
 
 ### MMvec
 
@@ -976,7 +1070,7 @@ tail -n +2 Baker_Supplemental_Table_S3.txt > bacteria_otu_table.txt
 sed 's/ //g' bacteria_otu_table.txt
 ```
 
-The OTU table was then filtered, such that it only contains features that also have metadata in the corresponding metadata file [Supplemental Table S4](https://genome.cshlp.org/content/suppl/2020/12/16/gr.265645.120.DC1/Supplemental_Table_S4.xlsx). This was done with the following Python script to generate `filtered_bacteria_otu_table.txt`:
+The OTU table was then filtered, such that it only contains features that also have metadata in the corresponding metadata file [Supplemental Table S4](https://genome.cshlp.org/content/suppl/2020/12/16/gr.265645.120.DC1/Supplemental_Table_S4.xlsx) of the previous study. This was done with the following Python script to generate `filtered_bacteria_otu_table.txt`:
 
 #### filter_bacteria_frequency_table.py
 
@@ -1038,7 +1132,7 @@ The `bacteria_metadata.txt` metadata file was converted from the previous study'
 tail -n +2 Baker_Supplemental_Table_S4.txt > bacteria_metadata.txt
 ```
 
-The `cytokines.txt` frequency table and `cytokines_metadata_ACTUAL.txt` files are provided (TODO) and were imported to QIIME 2 in a pipeline analogous to the above, with the file names `cytokines.qza` and `cytokines_metadata_ACTUAL.txt`, respectively.
+The `cytokines.txt` frequency table and `cytokines_metadata_ACTUAL.txt` files were imported to QIIME 2 in a pipeline analogous to the above, with the file names `cytokines.qza` and `cytokines_metadata_ACTUAL.txt`, respectively.
 
 In both the bacteria and cytokine metadata files, `vim` was used to edit the header of the features to '`id`'.
 
@@ -1048,18 +1142,8 @@ The virus and bacteria frequency tables were input to MMvec to generate the cond
 qiime mmvec paired-omics --i-microbes qiime_filtered_otu_table_1.qza --i-metabolites /bacteria_otu_table.qza --p-summary-interval 1 --output-dir mmvec_output_1
 ```
 
-The regression stats of the output, together with those of the null model, yielded a Q<sup>2</sup> score of 0.085973.
-
-![MMvec bacteria cross validation image](./markdown-images/mmvec-bacteria-cross-validation-score.png "MMvec bacteria cross validation with QIIME 2 View")
-
 The same was done for the conditial probabilities of co-occurrences of the viruses and cytokines; to generate the biplot where the viruses are represented as the points and the cytokines as the vectors, the `--i-microbes` and `--i-metabolites` arguments were switched, like so:
 
 ```sh
 qiime mmvec paired-omics --i-metabolites /qiime_filtered_otu_table_1.qza --i-microbes cytokines.qza --p-summary-interval 1 --p-input-prior 0.1 --output-dir mmvec_output_1
 ```
-
-The regression stats of the output, together with those of the null model, yielded a Q<sup>2</sup> score of 0.563235.
-
-![MMvec cytokine cross validation image](./markdown-images/mmvec-cytokine-invert-cross-validation-score.png "MMvec cytokine cross validation with QIIME 2 View")
-
-

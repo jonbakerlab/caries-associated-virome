@@ -665,7 +665,46 @@ conda run -p "ViWrap_conda_environments/ViWrap-Mapping" coverm genome \
         -2 "$(find virome/${sample_id}_S*_R1_001_kneaddata_paired_2.fastq)"
 ```
 
-CoverM created a relative abundance table for each sample. Using `paste` to join all of the files together, an OTU table with  relative abundances was obtained. The values in the table were multiplied by a factor of 1,000,000 and rounded to the nearest integer using Microsoft Excel in order to process the OTU table as a frequency table for downstream analyses.
+CoverM created a relative abundance table for each sample. These files were joined together to create a relative abundance OTU table using the following script:
+
+```sh
+#!/bin/bash
+
+# Compiles the output files of 'coverm genome' from a single directory into one OTU table file.
+# Keeps relative abundance values and unmapped percentage.
+# Arguments:
+#   1: The directory of 'coverm genome' output files
+#   2: Output file path, including file name
+
+# Get file name
+output_file_name=$(basename $2) 
+
+# Set up temporary files
+tmp_dir=$(mktemp -d)
+tmp_coverm_column=$(mktemp -p $tmp_dir)
+tmp_output=$(mktemp -p $tmp_dir)
+tmp_paste=$(mktemp -p $tmp_dir)
+trap 'rm -rf -- "$tmp_dir"' EXIT
+
+# Build the OTU table from CoverM data
+first_file_flag=0
+for file in $1/*_coverm_output.txt; do
+    if (( first_file_flag == 0 )); then
+        head -n +1 $file > $tmp_output
+        tail -n +2 $file | sort --stable -k1,1 >> $tmp_output
+        first_file_flag=1
+    else
+        head -n +1 <(awk '{print $2}' $file) > $tmp_coverm_column
+        awk '{print $2}' <(sort --stable -k1,1 <(tail -n +2 $file)) >> $tmp_coverm_column
+        paste -d $'\t' $tmp_output $tmp_coverm_column > $tmp_paste
+        cp $tmp_paste $tmp_output
+    fi
+done
+
+cp $tmp_output $2
+```
+
+The values in the table were multiplied by a factor of 1,000,000 and rounded to the nearest integer using Microsoft Excel in order to process the OTU table as a frequency table for downstream analyses.
 
 ### Filtering
 

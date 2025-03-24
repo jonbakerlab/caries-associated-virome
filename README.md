@@ -17,17 +17,17 @@ The Supplemental-Methods folder contains the [Supplemental-Methods](Supplemental
 ### QZV files
 The [QZV-files](QZV-files/) folder contains interactive QIIME 2 visualization files (may be visualized at https://view.qiime2.org) enabling readers to examine the datasets from Figure 2, Panels A, E, F, and G in 3-D, visualize metadata in different ways, and click on individual data points for more information.
 
-### Complete and high-quality novel genomes
-The [complete-and-hq-novel-genomes](complete-and-hq-novel-genomes) folder contains FASTA files of the 35 vOTUs that were novel (i.e., had no match at >95% ANI or >85% AF in either NCBI Virus or five other viral databases; see section below for details) and were also rated as either 'complete' or 'high-quality' by [ViWrap/CheckV](https://github.com/AnantharamanLab/ViWrap/tree/main). These genomes have been submitted to NCBI GenBank and a link to the accession number will be posted here after the process is complete.
+### Complete and High-quality Novel vOTUs
+The [all_complete_hq_novel_votus.zip](fasta_files/all_complete_hq_novel_votus.zip) file contains FASTA files of the 35 vOTUs that were novel (i.e., had no match at ≥95% ANI or ≥85% AF in either NCBI Virus or five other viral databases; see section below for details) and were also rated as either "Complete" or "High-quality" by [ViWrap/CheckV](https://github.com/AnantharamanLab/ViWrap/tree/main). These genomes have been submitted to NCBI GenBank and a link to the accession number will be posted here after the process is complete.
 
-### Novel genomes
-The [novel_genomes](novel-genomes) folder contains FASTA files for all 478 vOTUs that were novel; i.e. having no match at >95% ANI and >85% AF in either NCBI Virus or five different viral databases: Oral Virome Database (OVD, 48,425 genomes; PMID:35663034), Gut Virome Database (GVD, 33,242 genomes; PMID: 32841606), Gut Phage Database (GPD, 142,809 genomes; PMID: 33606979), Metagenomic Gut Virus catalogue (189,680 genomes, PMID: 34168315), and IMG/VR4 (15,722,824 genomes, PMID: 36399502).
+### Novel vOTUs
+The [all_novel_votus.zip](fasta_files/all_novel_votus.zip) file contains FASTA files for all 478 vOTUs that were novel; i.e. having no match at ≥95% ANI and ≥85% AF in either NCBI Virus or five different viral databases: Oral Virome Database (OVD, 48,425 genomes; PMID:35663034), Gut Virome Database (GVD, 33,242 genomes; PMID: 32841606), Gut Phage Database (GPD, 142,809 genomes; PMID: 33606979), Metagenomic Gut Virus catalogue (189,680 genomes, PMID: 34168315), and IMG/VR4 (15,722,824 genomes, PMID: 36399502).
 
-### All cluster rep genomes
-The [all_cluster_rep_genomes](all_cluster_rep_genomes) folder contains FASTA files for all 1,865 unique vOTUs identified in the metagenomes analyzed in this study.
+### All Phage vOTUs
+The [all_phage_votus.zip](fasta_files/all_phage_votus.zip) file contains FASTA files for all 1,865 unique phage vOTUs identified in the metagenomes analyzed in this study.
 
-### All ViWrap genomes
-The [all-viwrap-genomes](all-viwrap-genomes) folder contains FASTA files for all 2,485 vMAGs identified in the metagenomes analyzed in this study.
+### All ViWrap vMAGs
+The [all_vmags.zip](fasta_files/all_vmags.zip) file contains FASTA files for all 2,485 vMAGs identified by ViWrap in the metagenomes analyzed in this study.
 
 ### NCBI Accession Table
 This file is a table linking the contigs of each complete and high-qualty novel genome to their respective NCBI BioProject, BioSample, and SRR accession numbers.

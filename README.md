@@ -15,7 +15,7 @@ While many studies have examined the bacterial taxa associated with dental carie
 The Supplemental-Methods folder contains the [Supplemental-Methods](Supplemental-Methods/supplemental-methods.md) markdown file, which contains all the extended methods, code and scripts used in this study.
 
 ### QZV files
-The [QZV-files](QZV-files/) folder contains interactive QIIME 2 visualization files (may be visualized at https://view.qiime2.org) enabling readers to examine the datasets from Figure 2, Panels A, E, F, and G in 3-D, visualize metadata in different ways, and click on individual data points for more information.
+The [qzv_files](qzv_files/) folder contains interactive QIIME 2 visualization files (may be visualized at https://view.qiime2.org) enabling readers to examine the datasets from Figure 2, Panels A, E, F, and G in 3-D, visualize metadata in different ways, and click on individual data points for more information.
 
 ### Complete and High-quality Novel vOTUs
 The [all_complete_hq_novel_votus.zip](fasta_files/all_complete_hq_novel_votus.zip) file contains FASTA files of the 35 vOTUs that were novel (i.e., had no match at ≥95% ANI or ≥85% AF in either NCBI Virus or five other viral databases; see section below for details) and were also rated as either "Complete" or "High-quality" by [ViWrap/CheckV](https://github.com/AnantharamanLab/ViWrap/tree/main). These genomes have been submitted to NCBI GenBank and a link to the accession number will be posted here after the process is complete.

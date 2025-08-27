@@ -2,7 +2,7 @@
 
 **Authors: Jonah Tang and Jonathon L. Baker**
 
-This document catalogues the scripts and computational methods used in "The salivary virome during childhood dental caries", published in *mSphere* (PMID:40719460). Please cite the publication if you use any of the code or supplemental data contained here. 
+This document catalogues the scripts and computational methods used in ["The salivary virome during childhood dental caries", published in *mSphere* (PMID:40719460)](https://journals.asm.org/doi/10.1128/msphere.00198-25). Please cite the publication if you use any of the code or supplemental data contained here. 
 
 Saliva samples were collected from individuals as detailed in a previous study by our group, Baker et al. 2021 (PMID: 33239396). While the previous study examined metagenomics of these samples with a primarily bacterial focus, this study examined the oral virome and its relationship to caries, the bacteriome, and host immunological markers. This study also identified novel viral taxa. The raw sequencing reads of the oral metagenomes and are available on NCBI with accession numbers PRJNA478018 and SRP151559. The bacterial genomes assembled from those reads  are available on NCBI under the accession number PRJNA624185.  The 35 vMAGs representing novel vOTUs rated as either ‘complete’ or ‘high-quality’ by CheckV are available on NCBI with the accession number PRJNA478018.
 

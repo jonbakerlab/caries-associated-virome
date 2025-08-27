@@ -1,6 +1,6 @@
 # Caries associated virome
 
-This repository contains the code and data associated with "The salivary virome during childhood dental caries" by Jonah Tang and Jonathon L. Baker, published in *mSphere* (PMID: 40719460). Please cite the publication if you use any of the code or supplemental data contained here.
+This repository contains the code and data associated with ["The salivary virome during childhood dental caries" by Jonah Tang and Jonathon L. Baker, published in *mSphere* (PMID: 40719460)](https://journals.asm.org/doi/10.1128/msphere.00198-25). Please cite the publication if you use any of the code or supplemental data contained here.
 
 <img src="./github-figure3.png" width= 100% height=auto style="display: inline; margin: auto;" />
 
